@@ -1,150 +1,152 @@
 # AI Business Intelligence Assistant
 
-> Transform organizational reports into actionable business insights using Artificial Intelligence, Prompt Engineering, and Business Intelligence techniques.
+> **Transform organizational reports into actionable business insights
+> using Artificial Intelligence, Prompt Engineering, and Business
+> Intelligence techniques.**
 
----
+------------------------------------------------------------------------
 
 # Overview
 
-AI Business Intelligence Assistant is an intelligent analytics platform that automates business report analysis. It accepts organizational reports such as Excel, CSV, PDF, and Word documents, processes the data, calculates Key Performance Indicators (KPIs), generates interactive dashboards, produces executive summaries, identifies business trends, and provides AI-powered strategic recommendations using locally hosted Large Language Models (LLMs) through Ollama.
+AI Business Intelligence Assistant is a web-based analytics platform
+that automates business report analysis. It enables organizations to
+upload CSV, Excel, PDF, and Word reports, automatically process the
+data, calculate Key Performance Indicators (KPIs), generate interactive
+dashboards, and produce AI-powered executive summaries, trend analysis,
+and strategic recommendations using locally hosted Large Language Models
+(LLMs) through Ollama.
 
-The objective is to reduce manual reporting effort and enable faster, data-driven decision-making.
+The platform is designed to reduce manual reporting effort while
+enabling faster, data-driven decision-making while keeping all AI
+processing local.
 
----
+------------------------------------------------------------------------
 
 # Features
 
-* Secure user authentication using JWT
-* Upload CSV, Excel, PDF, and Word reports
-* Automatic data cleaning and preprocessing
-* KPI calculation
-* Interactive Business Intelligence dashboards
-* Executive Summary generation
-* Trend Analysis
-* Business Recommendations using AI
-* Report history
-* Downloadable reports (Future)
-* Multiple dashboard templates (Future)
+-   Secure JWT Authentication
+-   Upload CSV, Excel, PDF, and Word reports
+-   Automatic data cleaning and preprocessing
+-   KPI calculation engine
+-   Interactive BI dashboards
+-   Executive Summary generation
+-   Trend Analysis
+-   AI-powered Business Recommendations
+-   Report history management
+-   Responsive Bootstrap 5 interface
+-   Fully local AI inference using Ollama
 
----
+------------------------------------------------------------------------
 
 # Technology Stack
 
 ## Frontend
 
-* HTML5
-* Tailwind CSS
-* Vanilla JavaScript
-* Apache ECharts
-
----
+-   HTML5
+-   Bootstrap 5
+-   Vanilla JavaScript (ES6)
+-   Apache ECharts
+-   Bootstrap Icons
 
 ## Backend
 
-* FastAPI
-* SQLAlchemy
-* Pydantic
-* Uvicorn
-
----
-
-## Artificial Intelligence
-
-* Ollama
-* Qwen 2.5 / Llama 3.1
-* Prompt Engineering
-
----
-
-## Data Processing
-
-* Pandas
-* NumPy
-
----
-
-## File Parsing
-
-* pandas
-* openpyxl
-* pdfplumber
-* python-docx
-
----
+-   FastAPI
+-   SQLAlchemy
+-   Pydantic
+-   Uvicorn
 
 ## Database
 
-* PostgreSQL
+-   PostgreSQL
 
----
+## Artificial Intelligence
+
+-   Ollama
+-   Qwen 2.5 (Primary)
+-   Llama 3.1 (Secondary)
+-   Prompt Engineering
+
+## Data Processing
+
+-   Pandas
+-   NumPy
+
+## File Parsing
+
+-   openpyxl
+-   pdfplumber
+-   python-docx
 
 ## Authentication
 
-* JWT (JSON Web Tokens)
+-   JWT (JSON Web Tokens)
 
----
+------------------------------------------------------------------------
 
 # System Architecture
 
-```text
-                    HTML + Tailwind + JavaScript
-                               │
-                               ▼
-                        FastAPI Backend
-        ┌──────────────────┼──────────────────┐
-        ▼                  ▼                  ▼
-   File Upload        Data Processing     Authentication
-        │                  │                  │
-        ▼                  ▼                  ▼
- File Parsing        KPI Calculation       JWT Tokens
-        │                  │
-        └──────────────┬───┘
-                       ▼
-                Prompt Generator
-                       │
-                       ▼
-                 Ollama AI Model
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
+``` text
+                HTML5 + Bootstrap 5 + JavaScript
+                            │
+                            ▼
+                     FastAPI REST API
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+ Authentication      File Upload      Report History
+        │                 │
+        ▼                 ▼
+      JWT          File Processing
+                          │
+                          ▼
+                 Pandas Data Cleaning
+                          │
+                          ▼
+                  KPI Calculation Engine
+                          │
+                          ▼
+                  Prompt Engineering Layer
+                          │
+                          ▼
+                Ollama (Qwen2.5 / Llama3.1)
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
  Executive Summary   Trend Analysis   Recommendations
-                       │
-                       ▼
-                  PostgreSQL Database
-                       │
-                       ▼
-              Interactive BI Dashboard
+                          │
+                          ▼
+                     PostgreSQL
+                          │
+                          ▼
+              Apache ECharts Dashboard
 ```
 
----
+------------------------------------------------------------------------
 
 # Project Structure
 
-```text
+``` text
 AI-Business-Intelligence-Assistant/
 
-│
 ├── frontend/
-│   ├── pages/
+│   ├── assets/
 │   ├── css/
 │   ├── js/
-│   ├── assets/
-│   └── components/
+│   ├── pages/
+│   ├── components/
+│   └── index.html
 │
 ├── backend/
 │   ├── app/
 │   │   ├── api/
+│   │   ├── analytics/
 │   │   ├── auth/
 │   │   ├── database/
 │   │   ├── models/
+│   │   ├── prompts/
 │   │   ├── schemas/
 │   │   ├── services/
-│   │   ├── prompts/
-│   │   ├── analytics/
 │   │   ├── upload/
 │   │   ├── utils/
 │   │   └── main.py
-│   │
 │   ├── requirements.txt
 │   └── .env
 │
@@ -154,171 +156,134 @@ AI-Business-Intelligence-Assistant/
 └── LICENSE
 ```
 
----
+------------------------------------------------------------------------
 
 # Workflow
 
-1. User logs in.
-2. Uploads a business report.
-3. Backend validates the file.
-4. Data is cleaned using Pandas.
-5. KPIs are calculated.
-6. Prompt is generated.
-7. Ollama analyzes the report.
-8. AI returns:
-
-   * Executive Summary
-   * Trend Analysis
-   * Strategic Recommendations
-9. Dashboard is generated.
+1.  User logs in using JWT authentication.
+2.  Uploads a business report.
+3.  Backend validates and parses the file.
+4.  Data is cleaned using Pandas.
+5.  KPIs are calculated.
+6.  Prompt is generated.
+7.  Ollama analyzes the processed data.
+8.  AI returns:
+    -   Executive Summary
+    -   Trend Analysis
+    -   Strategic Recommendations
+9.  Dashboard is generated using Apache ECharts.
 10. Results are stored in PostgreSQL.
 
----
+------------------------------------------------------------------------
 
 # Installation
 
 ## Clone Repository
 
-```bash
+``` bash
 git clone https://github.com/yourusername/AI-Business-Intelligence-Assistant.git
-
 cd AI-Business-Intelligence-Assistant
 ```
 
----
-
 ## Backend Setup
 
-Create a virtual environment:
-
-```bash
+``` bash
 python -m venv .venv
 ```
 
-Activate it:
-
 ### Windows
 
-```bash
+``` bash
 .venv\Scripts\activate
 ```
 
-### Linux / macOS
+### Install Dependencies
 
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies:
-
-```bash
+``` bash
 pip install -r requirements.txt
 ```
 
----
+## PostgreSQL
 
-## Install PostgreSQL
+Create a database named:
 
-Create a database:
-
-```sql
+``` sql
 CREATE DATABASE business_intelligence;
 ```
 
----
-
 ## Install Ollama
 
-Download and install Ollama.
-
-Pull a model:
-
-```bash
+``` bash
 ollama pull qwen2.5:7b
-```
-
-or
-
-```bash
 ollama pull llama3.1:8b
-```
-
-Run the model:
-
-```bash
 ollama serve
 ```
 
----
-
 ## Run Backend
 
-```bash
+``` bash
 uvicorn app.main:app --reload
 ```
 
-Backend:
+Open:
 
-```
-http://127.0.0.1:8000
-```
-
-Swagger:
-
-```
-http://127.0.0.1:8000/docs
-```
-
----
+-   API: http://127.0.0.1:8000
+-   Swagger: http://127.0.0.1:8000/docs
 
 ## Frontend
 
-Open `index.html` using a local development server (such as VS Code Live Server), or configure your preferred static server.
+Open the project using a local web server (e.g., VS Code Live Server).
 
----
+------------------------------------------------------------------------
 
 # Roadmap
 
 ## Phase 1
 
-* User Authentication
-* File Upload
-* Dashboard
-* KPI Calculation
+-   Authentication
+-   Project Setup
+-   Frontend Layout
+-   Database Configuration
 
 ## Phase 2
 
-* Executive Summary
-* Trend Analysis
-* Recommendations
+-   File Upload
+-   File Parsing
+-   KPI Calculation
 
 ## Phase 3
 
-* Report Export
-* Dashboard Templates
-* Report History
+-   Interactive Dashboard
+-   Charts
+-   Report History
 
 ## Phase 4
 
-* Forecasting
-* Natural Language Queries
-* Scheduled Reports
-* Role-Based Access Control
+-   AI Integration
+-   Executive Summary
+-   Trend Analysis
+-   Business Recommendations
 
----
+## Phase 5
+
+-   Testing
+-   Documentation
+-   Deployment
+
+------------------------------------------------------------------------
 
 # Future Enhancements
 
-* AI Chat with Reports
-* Forecasting Models
-* RAG Integration
-* Multi-Organization Support
-* Email Reports
-* Real-Time Dashboards
-* Business Alerts
-* Data Connectors (ERP, CRM, APIs)
+-   AI Chat with Reports
+-   Forecasting Models
+-   RAG Integration
+-   Multi-Organization Support
+-   Email Reports
+-   Real-Time Dashboards
+-   Business Alerts
+-   ERP / CRM Connectors
 
----
+------------------------------------------------------------------------
 
 # License
 
