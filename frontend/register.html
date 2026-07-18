@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register an account on the AI Business Intelligence Assistant platform.">
+    <title>Register - AI BI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="glass-card auth-card shadow-lg">
+            <div class="text-center mb-4">
+                <i class="bi bi-person-plus-fill text-gradient" style="font-size: 2.5rem;"></i>
+                <h2 class="text-gradient mt-2">Create Account</h2>
+                <p class="text-muted">Register to set up your business intelligence portal</p>
+            </div>
+            
+            <form id="register-form">
+                <div class="mb-3">
+                    <label for="username" class="form-label text-light small fw-bold">Username</label>
+                    <input type="text" id="username" class="form-control form-control-custom" placeholder="e.g. janesmith" required minlength="3" maxlength="50" autocomplete="username">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label text-light small fw-bold">Email Address</label>
+                    <input type="email" id="email" class="form-control form-control-custom" placeholder="name@company.com" required autocomplete="email">
+                </div>
+
+                <div class="mb-3">
+                    <label for="role" class="form-label text-light small fw-bold">Select Role</label>
+                    <select id="role" class="form-select form-control-custom" required>
+                        <option value="analyst" selected>Analyst (Upload & Edit)</option>
+                        <option value="executive">Executive (Read Summaries & Dashboards)</option>
+                        <option value="admin">Administrator (Full Access)</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label text-light small fw-bold">Password</label>
+                    <input type="password" id="password" class="form-control form-control-custom" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+                </div>
+
+                <div class="mb-4">
+                    <label for="confirm-password" class="form-label text-light small fw-bold">Confirm Password</label>
+                    <input type="password" id="confirm-password" class="form-control form-control-custom" placeholder="Confirm password" required minlength="6" autocomplete="new-password">
+                </div>
+                
+                <div class="d-grid mb-3">
+                    <button id="btn-register-submit" type="submit" class="btn btn-gradient py-2">
+                        <i class="bi bi-person-plus-fill me-2"></i>Register
+                    </button>
+                </div>
+            </form>
+            
+            <div class="text-center mt-3 small">
+                <span class="text-muted">Already have an account?</span>
+                <a id="link-goto-login" href="login.html" class="text-gradient fw-bold ms-1 text-decoration-none">Sign In</a>
+            </div>
+            <div class="text-center mt-2 small">
+                <a href="index.html" class="text-muted text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to Home</a>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

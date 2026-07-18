@@ -176,63 +176,80 @@ AI-Business-Intelligence-Assistant/
 
 ------------------------------------------------------------------------
 
-# Installation
+# Installation & Local Run (Phase 1)
 
-## Clone Repository
+Follow these steps to set up and run the Phase 1 implementation locally.
 
-``` bash
-git clone https://github.com/yourusername/AI-Business-Intelligence-Assistant.git
-cd AI-Business-Intelligence-Assistant
-```
+## 1. Prerequisites
+- **Python**: Version 3.10 or higher.
+- **PostgreSQL**: Local database instance running.
+- **Static Web Server**: Visual Studio Code Live Server extension or Python's built-in `http.server`.
 
-## Backend Setup
+---
 
-``` bash
-python -m venv .venv
-```
-
-### Windows
-
-``` bash
-.venv\Scripts\activate
-```
-
-### Install Dependencies
-
-``` bash
-pip install -r requirements.txt
-```
-
-## PostgreSQL
-
-Create a database named:
-
-``` sql
+## 2. Database Creation
+Connect to your local PostgreSQL instance and execute the SQL command below to create the database:
+```sql
 CREATE DATABASE business_intelligence;
 ```
 
-## Install Ollama
+---
 
-``` bash
-ollama pull qwen2.5:7b
-ollama pull llama3.1:8b
-ollama serve
-```
+## 3. Backend Setup
+1. Open a terminal and navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Create a virtual environment:
+   ```bash
+   python -m venv .venv
+   ```
+3. Activate the virtual environment:
+   - **Windows (PowerShell)**:
+     ```powershell
+     .venv\Scripts\Activate.ps1
+     ```
+   - **Windows (CMD)**:
+     ```cmd
+     .venv\Scripts\activate.bat
+     ```
+   - **macOS / Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+4. Install backend dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. Configure environment variables:
+   - Copy `.env.example` to a new file named `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Open `.env` and fill in your local database credentials under `DATABASE_URL`, and optionally customize `JWT_SECRET`.
 
-## Run Backend
+---
 
-``` bash
+## 4. Run Backend
+Start the FastAPI server using `uvicorn`:
+```bash
 uvicorn app.main:app --reload
 ```
+Once started, the backend API will run on `http://127.0.0.1:8000`. You can inspect endpoints and use interactive testing via Swagger at `http://127.0.0.1:8000/docs`.
 
-Open:
+---
 
--   API: http://127.0.0.1:8000
--   Swagger: http://127.0.0.1:8000/docs
+## 5. Serve Frontend
+The frontend consists of static vanilla HTML/JS/CSS assets.
+1. Open the project root or `frontend` directory in VS Code.
+2. Launch the **Live Server** extension (typically hosts on `http://127.0.0.1:5500`).
+3. Alternatively, serve the files using python in a terminal from the `frontend/` directory:
+   ```bash
+   cd frontend
+   python -m http.server 5500
+   ```
+4. Visit `http://127.0.0.1:5500/index.html` (or `http://localhost:5500`) in your web browser.
 
-## Frontend
-
-Open the project using a local web server (e.g., VS Code Live Server).
 
 ------------------------------------------------------------------------
 
