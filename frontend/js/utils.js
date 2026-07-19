@@ -34,12 +34,12 @@ export function showToast(message, type = 'success') {
     }
 
     const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type === 'error' ? 'danger' : type} custom-alert shadow-lg glass-card text-light`;
+    alertDiv.className = `alert alert-${type === 'error' ? 'danger' : type} custom-alert shadow-lg glass-card`;
     alertDiv.setAttribute('role', 'alert');
     
     const borderColor = type === 'error' ? '#f87171' : '#34d399';
     alertDiv.style.borderLeft = `4px solid ${borderColor}`;
-    alertDiv.style.background = 'rgba(17, 24, 39, 0.95)';
+    alertDiv.style.background = 'rgba(255, 255, 255, 0.98)';
     alertDiv.style.backdropFilter = 'blur(10px)';
     
     alertDiv.innerHTML = `

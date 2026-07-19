@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Dynamically class user badges
                 let badgeClass = 'bg-primary';
                 if (user.role === 'admin') badgeClass = 'bg-danger';
-                else if (user.role === 'executive') badgeClass = 'bg-info text-dark';
+                else if (user.role === 'executive') badgeClass = 'bg-info';
                 
                 userRoleEl.className = `badge ${badgeClass} text-capitalize`;
             }
