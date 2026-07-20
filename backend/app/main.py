@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database.connection import engine, Base
 from app.api.auth import router as auth_router
+from app.api.upload import router as upload_router
+from app.models.report import Report
 
 # Create database tables at application initialization
 # (Ensures 'users' table is auto-created in PostgreSQL on run)
@@ -25,6 +27,7 @@ app.add_middleware(
 
 # Include modular authentication router
 app.include_router(auth_router)
+app.include_router(upload_router)
 
 @app.get("/")
 def get_root() -> dict:

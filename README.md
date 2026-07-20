@@ -26,13 +26,14 @@ processing local.
 
 -   Secure JWT Authentication
 -   Upload CSV, Excel, PDF, and Word reports
+-   Server-side file validation and secure UUID-based storage
+-   Report upload history and soft-delete management
 -   Automatic data cleaning and preprocessing
 -   KPI calculation engine
 -   Interactive BI dashboards
 -   Executive Summary generation
 -   Trend Analysis
 -   AI-powered Business Recommendations
--   Report history management
 -   Responsive Bootstrap 5 interface
 -   Fully local AI inference using Ollama
 
@@ -87,35 +88,35 @@ processing local.
 
 ``` text
                 HTML5 + Bootstrap 5 + JavaScript
-                            │
-                            ▼
+                            |
+                            v
                      FastAPI REST API
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
+        +-----------------+-----------------+
+        v                 v                 v
  Authentication      File Upload      Report History
-        │                 │
-        ▼                 ▼
+        |                 |
+        v                 v
       JWT          File Processing
-                          │
-                          ▼
+                          |
+                          v
                  Pandas Data Cleaning
-                          │
-                          ▼
+                          |
+                          v
                   KPI Calculation Engine
-                          │
-                          ▼
+                          |
+                          v
                   Prompt Engineering Layer
-                          │
-                          ▼
+                          |
+                          v
                 Ollama (Qwen2.5 / Llama3.1)
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
+        +-----------------+-----------------+
+        v                 v                 v
  Executive Summary   Trend Analysis   Recommendations
-                          │
-                          ▼
+                          |
+                          v
                      PostgreSQL
-                          │
-                          ▼
+                          |
+                          v
               Apache ECharts Dashboard
 ```
 
@@ -126,34 +127,47 @@ processing local.
 ``` text
 AI-Business-Intelligence-Assistant/
 
-├── frontend/
-│   ├── assets/
-│   ├── css/
-│   ├── js/
-│   ├── pages/
-│   ├── components/
-│   └── index.html
-│
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── analytics/
-│   │   ├── auth/
-│   │   ├── database/
-│   │   ├── models/
-│   │   ├── prompts/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   ├── upload/
-│   │   ├── utils/
-│   │   └── main.py
-│   ├── requirements.txt
-│   └── .env
-│
-├── uploads/
-├── reports/
-├── README.md
-└── LICENSE
+|-- frontend/
+|   |-- css/
+|   |   `-- style.css
+|   |-- js/
+|   |   |-- api.js
+|   |   |-- auth.js
+|   |   |-- dashboard.js
+|   |   `-- utils.js
+|   |-- index.html
+|   |-- login.html
+|   |-- register.html
+|   `-- dashboard.html
+|
+|-- backend/
+|   |-- app/
+|   |   |-- api/
+|   |   |   |-- auth.py
+|   |   |   `-- upload.py
+|   |   |-- auth/
+|   |   |   `-- security.py
+|   |   |-- core/
+|   |   |   `-- config.py
+|   |   |-- database/
+|   |   |   `-- connection.py
+|   |   |-- models/
+|   |   |   |-- user.py
+|   |   |   `-- report.py
+|   |   |-- schemas/
+|   |   |   |-- user.py
+|   |   |   `-- report.py
+|   |   `-- services/
+|   |       |-- user_service.py
+|   |       |-- file_service.py
+|   |       `-- report_service.py
+|   |-- requirements.txt
+|   `-- .env.example
+|
+|-- uploads/
+|-- reports/
+|-- README.md
+`-- Phase-1.md
 ```
 
 ------------------------------------------------------------------------
@@ -162,28 +176,24 @@ AI-Business-Intelligence-Assistant/
 
 1.  User logs in using JWT authentication.
 2.  Uploads a business report.
-3.  Backend validates and parses the file.
-4.  Data is cleaned using Pandas.
-5.  KPIs are calculated.
-6.  Prompt is generated.
-7.  Ollama analyzes the processed data.
-8.  AI returns:
-    -   Executive Summary
-    -   Trend Analysis
-    -   Strategic Recommendations
-9.  Dashboard is generated using Apache ECharts.
-10. Results are stored in PostgreSQL.
+3.  Backend validates the file type, size, and signature.
+4.  File metadata is stored per user in the database.
+5.  File bytes are stored securely on disk in `uploads/`.
+6.  Upload history is shown in the dashboard.
+7.  Later phases will parse data, calculate KPIs, and generate AI insights.
 
 ------------------------------------------------------------------------
 
-# Installation & Local Run (Phase 1)
+# Installation & Local Run (Phase 1 + Phase 2)
 
-Follow these steps to set up and run the Phase 1 implementation locally.
+Follow these steps to set up and run the current implementation locally.
 
 ## 1. Prerequisites
 - **Python**: Version 3.10 or higher.
 - **PostgreSQL**: Local database instance running.
 - **Static Web Server**: Visual Studio Code Live Server extension or Python's built-in `http.server`.
+- **Linux only for MIME detection**: Install the `libmagic` system package before using `python-magic`.
+  Example on Ubuntu/Debian: `sudo apt-get install libmagic1`
 
 ---
 
@@ -221,6 +231,7 @@ CREATE DATABASE business_intelligence;
    ```bash
    pip install -r requirements.txt
    ```
+   This now includes `python-multipart` for multipart uploads and `python-magic` for MIME/signature checks.
 5. Configure environment variables:
    - Copy `.env.example` to a new file named `.env`:
      ```bash
@@ -237,6 +248,11 @@ uvicorn app.main:app --reload
 ```
 Once started, the backend API will run on `http://127.0.0.1:8000`. You can inspect endpoints and use interactive testing via Swagger at `http://127.0.0.1:8000/docs`.
 
+### Phase 2 API endpoints
+- `POST /api/upload`
+- `GET /api/reports`
+- `DELETE /api/reports/{id}`
+
 ---
 
 ## 5. Serve Frontend
@@ -249,7 +265,7 @@ The frontend consists of static vanilla HTML/JS/CSS assets.
    python -m http.server 5500
    ```
 4. Visit `http://127.0.0.1:5500/index.html` (or `http://localhost:5500`) in your web browser.
-
+5. Sign in and open the dashboard to upload supported report files and manage upload history.
 
 ------------------------------------------------------------------------
 
@@ -265,18 +281,19 @@ The frontend consists of static vanilla HTML/JS/CSS assets.
 ## Phase 2
 
 -   File Upload
--   File Parsing
--   KPI Calculation
+-   File Validation
+-   Secure File Storage
+-   Report History Management
 
 ## Phase 3
 
+-   File Parsing
 -   Interactive Dashboard
 -   Charts
--   Report History
 
 ## Phase 4
 
--   AI Integration
+-   KPI Extraction
 -   Executive Summary
 -   Trend Analysis
 -   Business Recommendations

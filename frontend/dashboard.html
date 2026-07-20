@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="sidebar-link">
+                <a href="#report-management" class="sidebar-link">
                     <i class="bi bi-file-earmark-bar-graph"></i>Reports
                 </a>
             </li>
@@ -63,16 +63,16 @@
         <div class="dash-header flex-column flex-sm-row align-items-start align-items-sm-center gap-3">
             <div>
                 <h1 class="h3 m-0">Welcome Back, <span id="welcome-name" class="text-gradient">User</span>!</h1>
-                <p class="text-muted m-0">Here is the latest intelligence summary of your organization.</p>
+                <p class="text-muted m-0">Analytics and reporting at your fingertips.</p>
             </div>
             <div>
-                <button id="btn-upload-placeholder" class="btn btn-gradient btn-sm" disabled>
-                    <i class="bi bi-cloud-arrow-up-fill me-2"></i>Upload Report (Phase 2)
+                <button id="btn-upload-trigger" class="btn btn-gradient btn-sm">
+                    <i class="bi bi-cloud-arrow-up-fill me-2"></i>Upload Report
                 </button>
             </div>
         </div>
 
-        <!-- Metric KPI Cards (Static Placeholders) -->
+        <!-- Metric KPI Cards -->
         <div class="row g-4 mb-4">
             <div class="col-12 col-sm-6 col-xl-3">
                 <div class="glass-card p-4">
@@ -80,23 +80,23 @@
                         <div class="text-muted small fw-bold text-uppercase">Total Revenue</div>
                         <div class="p-2 bg-success bg-opacity-10 text-success rounded-3"><i class="bi bi-currency-dollar"></i></div>
                     </div>
-                    <h3 class="m-0">$45,231.89</h3>
+                    <h3 class="m-0">$0</h3>
                     <div class="text-success small mt-2 d-flex align-items-center">
                         <i class="bi bi-arrow-up-right me-1"></i>
-                        <span>+12.5% vs last month</span>
+                        <span>+0% vs last month</span>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-xl-3">
                 <div class="glass-card p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="text-muted small fw-bold text-uppercase">Reports Analyzed</div>
+                        <div class="text-muted small fw-bold text-uppercase">Reports Uploaded</div>
                         <div class="p-2 bg-primary bg-opacity-10 text-indigo rounded-3" style="color: #a5b4fc;"><i class="bi bi-file-earmark-text"></i></div>
                     </div>
-                    <h3 class="m-0">0</h3>
+                    <h3 id="reports-count" class="m-0">0</h3>
                     <div class="text-muted small mt-2 d-flex align-items-center">
-                        <i class="bi bi-dash-circle me-1"></i>
-                        <span>No files uploaded yet</span>
+                        <i class="bi bi-clock-history me-1"></i>
+                        <span id="reports-count-caption">No files uploaded yet</span>
                     </div>
                 </div>
             </div>
@@ -119,11 +119,74 @@
                         <div class="text-muted small fw-bold text-uppercase">Efficiency Rate</div>
                         <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-3"><i class="bi bi-lightning-charge"></i></div>
                     </div>
-                    <h3 class="m-0">94.8%</h3>
+                    <h3 class="m-0">0%</h3>
                     <div class="text-warning small mt-2 d-flex align-items-center">
                         <i class="bi bi-arrow-up-right me-1"></i>
-                        <span>+0.8% variance</span>
+                        <span>+0% variance</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-management" class="row g-4 mb-4">
+            <div class="col-12 col-lg-5">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                        <div>
+                            <h4 class="mb-2">Report Upload</h4>
+                            <p class="text-muted mb-0">Supported formats: CSV, XLSX, XLS, PDF, DOCX. Maximum size: 100MB.</p>
+                        </div>
+                    </div>
+
+                    <input id="report-file-input" type="file" class="d-none" accept=".csv,.xlsx,.xls,.pdf,.docx">
+
+                    <div id="upload-dropzone" class="upload-dropzone mb-3" tabindex="0" role="button" aria-label="Upload report by choosing or dragging a file">
+                        <div class="upload-dropzone-icon">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                        </div>
+                        <h5 class="mb-2">Drag and drop a report here</h5>
+                        <p class="text-muted mb-3">or choose a file from your computer</p>
+                        <button id="btn-choose-file" type="button" class="btn btn-outline-primary">
+                            <i class="bi bi-folder2-open me-2"></i>Choose File
+                        </button>
+                        <div id="selected-file-name" class="upload-selection-note mt-3">No file selected</div>
+                    </div>
+
+                    <div id="upload-progress-wrapper" class="upload-progress-wrapper d-none" aria-live="polite">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-semibold">Upload progress</span>
+                            <span id="upload-progress-text" class="small text-muted">0%</span>
+                        </div>
+                        <div class="progress upload-progress-bar-shell">
+                            <div id="upload-progress-bar" class="progress-bar upload-progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                        <div>
+                            <h4 class="mb-2">Upload History</h4>
+                            <p class="text-muted mb-0">Your reports are stored securely and scoped to your account.</p>
+                        </div>
+                        <button id="btn-refresh-reports" type="button" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                        </button>
+                    </div>
+
+                    <div id="reports-loading" class="history-state d-none">
+                        <i class="bi bi-arrow-repeat spin-soft"></i>
+                        <p class="mb-0">Loading your reports...</p>
+                    </div>
+
+                    <div id="reports-empty" class="history-state">
+                        <i class="bi bi-folder2-open"></i>
+                        <p class="mb-0">No uploaded reports yet. Your upload history will appear here.</p>
+                    </div>
+
+                    <div id="reports-list" class="reports-list d-none"></div>
                 </div>
             </div>
         </div>
@@ -136,7 +199,7 @@
                     <h4 class="mb-4">Performance Trends</h4>
                     <div class="empty-state-box">
                         <i class="bi bi-bar-chart-line"></i>
-                        <p class="text-center">Interactive dashboard visualization will be available in Phase 3.</p>
+                        <p class="text-center">Interactive dashboard visualization will be Updated Soon.</p>
                         <span class="badge bg-secondary">Awaiting Report Uploads</span>
                     </div>
                 </div>
@@ -148,7 +211,7 @@
                     <h4 class="mb-4">AI Executive Insight</h4>
                     <div class="empty-state-box">
                         <i class="bi bi-robot"></i>
-                        <p class="text-center">AI summaries, trends and recommendations will be populated in Phase 4.</p>
+                        <p class="text-center">AI summaries, trends and recommendations will be Updated Soon</p>
                         <span class="badge bg-secondary">Awaiting LLM Connection</span>
                     </div>
                 </div>

@@ -485,3 +485,155 @@ select.form-control-custom {
     padding: 2rem 1.5rem;
   }
 }
+
+/* Phase 2 upload management */
+.upload-dropzone {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(241, 245, 249, 0.92));
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.is-dragover {
+  border-color: rgba(79, 70, 229, 0.45);
+  background: linear-gradient(180deg, rgba(238, 242, 255, 0.92), rgba(255, 255, 255, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.12);
+}
+
+.upload-dropzone.is-disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.upload-dropzone-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1rem;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--accent-primary);
+  font-size: 1.8rem;
+}
+
+.upload-dropzone h5 {
+  margin-bottom: 0.35rem;
+}
+
+.upload-selection-note {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.upload-progress-wrapper {
+  margin-top: 1rem;
+}
+
+.upload-progress-bar-shell {
+  height: 0.8rem;
+  border-radius: 999px;
+  background-color: #e2e8f0;
+  overflow: hidden;
+}
+
+.upload-progress-bar {
+  background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+  border-radius: 999px;
+}
+
+.history-state {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.history-state i {
+  font-size: 2rem;
+  color: var(--accent-primary);
+  margin-bottom: 0.9rem;
+}
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.report-item-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.report-item-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--accent-primary);
+  font-size: 1.2rem;
+}
+
+.report-item h5 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.report-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.spin-soft {
+  animation: spinSoft 1s linear infinite;
+}
+
+@keyframes spinSoft {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .report-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .report-delete-btn {
+    width: 100%;
+  }
+}
