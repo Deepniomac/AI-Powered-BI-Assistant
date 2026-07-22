@@ -1,11 +1,13 @@
-import { apiRequest, deleteReport, getReports, uploadReport } from './api.js';
+import { apiRequest, deleteReport, getProcessingResult, getReports, processReport, uploadReport } from './api.js';
 import { getAuthToken, isTokenExpired, removeAuthToken, showToast } from './utils.js';
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
-const ALLOWED_EXTENSIONS = ['csv', 'xlsx', 'xls', 'pdf', 'docx'];
+const ALLOWED_EXTENSIONS = ['csv', 'xlsx', 'xls', 'json', 'pdf', 'docx'];
 
 let reports = [];
 let isUploading = false;
+const processingResults = new Map();
+const processingInFlight = new Set();
 
 function formatFileSize(bytes) {
     if (bytes < 1024) return `${bytes} B`;
@@ -89,6 +91,32 @@ function setUploadBusyState(busy) {
     if (dropzone) dropzone.classList.toggle('is-disabled', busy);
 }
 
+function renderProcessingSummary(reportId) {
+    const result = processingResults.get(reportId);
+    if (!result) {
+        return '';
+    }
+
+    const rows = result.metadata?.total_rows ?? 0;
+    const columns = result.metadata?.total_columns ?? 0;
+    const statusClass = result.validation_status === 'passed' ? 'status-passed' : 'status-failed';
+    const message = result.message ? `<p class="processing-message">${result.message}</p>` : '';
+
+    return `
+        <div class="processing-summary">
+            <div class="processing-summary-grid">
+                <span class="processing-pill ${statusClass}">${result.status.replaceAll('_', ' ')}</span>
+                <span class="processing-pill ${statusClass}">Validation: ${result.validation_status}</span>
+                <span class="processing-pill">Rows: ${rows}</span>
+                <span class="processing-pill">Columns: ${columns}</span>
+                <span class="processing-pill">Warnings: ${result.warning_count}</span>
+                <span class="processing-pill">Errors: ${result.error_count}</span>
+            </div>
+            ${message}
+        </div>
+    `;
+}
+
 function renderReports() {
     const emptyEl = document.getElementById('reports-empty');
     const listEl = document.getElementById('reports-list');
@@ -111,22 +139,45 @@ function renderReports() {
                 <div class="report-item-icon">
                     <i class="bi bi-file-earmark-arrow-up"></i>
                 </div>
-                <div>
+                <div class="report-item-body">
                     <h5>${report.original_name}</h5>
                     <div class="report-item-meta">
                         <span class="badge bg-secondary text-uppercase">${report.file_type}</span>
                         <span>${formatFileSize(report.file_size)}</span>
                         <span>${formatUploadTime(report.upload_time)}</span>
                     </div>
+                    ${renderProcessingSummary(report.id)}
                 </div>
             </div>
-            <button class="btn btn-outline-danger btn-sm report-delete-btn" data-report-id="${report.id}" type="button">
-                <i class="bi bi-trash3 me-1"></i>Delete
-            </button>
+            <div class="report-item-actions">
+                <button class="btn btn-outline-primary btn-sm report-process-btn" data-report-id="${report.id}" type="button" ${processingInFlight.has(report.id) ? 'disabled' : ''}>
+                    <i class="bi ${processingInFlight.has(report.id) ? 'bi-arrow-repeat spin-soft' : 'bi-gear-wide-connected'} me-1"></i>${processingInFlight.has(report.id) ? 'Processing...' : 'Process'}
+                </button>
+                <button class="btn btn-outline-danger btn-sm report-delete-btn" data-report-id="${report.id}" type="button">
+                    <i class="bi bi-trash3 me-1"></i>Delete
+                </button>
+            </div>
         </article>
     `).join('');
 
     updateReportMetrics();
+}
+
+async function hydrateProcessingResults() {
+    const processingFetches = reports.map(async (report) => {
+        try {
+            const response = await getProcessingResult(report.id);
+            if (response.ok) {
+                const payload = await response.json();
+                processingResults.set(report.id, payload);
+            }
+        } catch (error) {
+            console.error(`Failed to fetch processing result for report ${report.id}:`, error);
+        }
+    });
+
+    await Promise.all(processingFetches);
+    renderReports();
 }
 
 async function loadReports(showLoader = true) {
@@ -143,6 +194,7 @@ async function loadReports(showLoader = true) {
 
         reports = await response.json();
         renderReports();
+        await hydrateProcessingResults();
     } catch (error) {
         console.error('Failed to load reports:', error);
         showToast(error.message || 'Failed to load reports.', 'error');
@@ -159,7 +211,7 @@ function validateSelectedFile(file) {
 
     const extension = file.name.split('.').pop()?.toLowerCase() || '';
     if (!ALLOWED_EXTENSIONS.includes(extension)) {
-        showToast('Unsupported file type. Please upload CSV, XLSX, XLS, PDF, or DOCX.', 'error');
+        showToast('Unsupported file type. Please upload CSV, XLSX, XLS, JSON, PDF, or DOCX.', 'error');
         return false;
     }
 
@@ -222,11 +274,44 @@ async function handleDeleteReport(reportId) {
         }
 
         reports = reports.filter((report) => report.id !== reportId);
+        processingResults.delete(reportId);
         renderReports();
         showToast('Report deleted successfully.', 'success');
     } catch (error) {
         console.error('Delete failed:', error);
         showToast(error.message || 'Failed to delete report.', 'error');
+    }
+}
+
+async function handleProcessReport(reportId) {
+    if (processingInFlight.has(reportId)) {
+        return;
+    }
+
+    processingInFlight.add(reportId);
+    renderReports();
+
+    try {
+        const response = await processReport(reportId);
+        const payload = await response.json().catch(() => null);
+        if (!response.ok) {
+            throw new Error(payload?.detail || payload?.message || 'Failed to process report');
+        }
+
+        processingResults.set(reportId, payload);
+        renderReports();
+
+        if (payload.status === 'processing_completed') {
+            showToast('Report processed successfully.', 'success');
+        } else {
+            showToast(payload.message || 'Processing completed with issues.', 'error');
+        }
+    } catch (error) {
+        console.error('Processing failed:', error);
+        showToast(error.message || 'Failed to process report.', 'error');
+    } finally {
+        processingInFlight.delete(reportId);
+        renderReports();
     }
 }
 
@@ -284,10 +369,20 @@ function bindUploadInteractions() {
     });
 
     refreshButton?.addEventListener('click', () => {
+        processingResults.clear();
         loadReports(true);
     });
 
     listEl?.addEventListener('click', async (event) => {
+        const processButton = event.target.closest('.report-process-btn');
+        if (processButton) {
+            const reportId = Number(processButton.dataset.reportId);
+            if (reportId) {
+                await handleProcessReport(reportId);
+            }
+            return;
+        }
+
         const deleteButton = event.target.closest('.report-delete-btn');
         if (!deleteButton) return;
 

@@ -24,12 +24,12 @@
   --bs-secondary-color: var(--text-muted) !important;
   
   /* Bootstrap RGB colors mapped to legible, high-contrast dark variants */
-  --bs-primary-rgb: 79, 70, 229 !important;     /* Indigo-600 */
-  --bs-secondary-rgb: 100, 116, 139 !important;  /* Slate-500 */
-  --bs-success-rgb: 4, 120, 87 !important;       /* Emerald-700 */
-  --bs-info-rgb: 3, 105, 161 !important;         /* Sky-700 */
-  --bs-warning-rgb: 180, 83, 9 !important;       /* Amber-700 */
-  --bs-danger-rgb: 185, 28, 28 !important;       /* Red-700 */
+  --bs-primary-rgb: 79, 70, 229 !important;
+  --bs-secondary-rgb: 100, 116, 139 !important;
+  --bs-success-rgb: 4, 120, 87 !important;
+  --bs-info-rgb: 3, 105, 161 !important;
+  --bs-warning-rgb: 180, 83, 9 !important;
+  --bs-danger-rgb: 185, 28, 28 !important;
 }
 
 body {
@@ -46,7 +46,6 @@ body {
   color-scheme: light;
 }
 
-/* Global Typography Adjustments */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: var(--font-family);
   font-weight: 700;
@@ -77,7 +76,6 @@ a:hover {
   color: var(--accent-secondary);
 }
 
-/* Cards & Spacing */
 .glass-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
   backdrop-filter: blur(16px);
@@ -95,7 +93,6 @@ a:hover {
   box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.08), 0 0 20px 2px rgba(99, 102, 241, 0.04);
 }
 
-/* Dashboard Header */
 .dash-header h1 {
   font-size: 1.85rem !important;
   font-weight: 700 !important;
@@ -108,7 +105,6 @@ a:hover {
   font-size: 0.95rem;
 }
 
-/* Card Titles */
 .glass-card h4 {
   font-size: 1.25rem !important;
   font-weight: 600 !important;
@@ -116,40 +112,36 @@ a:hover {
   color: var(--text-main) !important;
 }
 
-/* KPI Card Labels ("TOTAL REVENUE", etc.) */
 .glass-card .text-muted.small.fw-bold.text-uppercase {
-  color: var(--text-muted) !important; /* Legible Slate Gray */
+  color: var(--text-muted) !important;
   letter-spacing: 0.06em !important;
   font-weight: 700 !important;
   font-size: 0.76rem !important;
 }
 
-/* KPI Primary Values */
 .glass-card h3 {
   font-size: 1.85rem !important;
   font-weight: 700 !important;
-  color: var(--text-main) !important; /* Deep contrast Slate-900 */
+  color: var(--text-main) !important;
   margin: 0.6rem 0 !important;
 }
 
-/* Secondary KPI Stats */
 .glass-card .text-success {
-  color: #047857 !important; /* Emerald-700 for high-contrast green */
+  color: #047857 !important;
 }
 
 .glass-card .text-info {
-  color: #0369a1 !important; /* Sky-700 for high-contrast blue */
+  color: #0369a1 !important;
 }
 
 .glass-card .text-warning {
-  color: #b45309 !important; /* Amber-700 for high-contrast orange */
+  color: #b45309 !important;
 }
 
 .glass-card .text-muted.small {
   color: var(--text-muted) !important;
 }
 
-/* Metric Icon Badges Configuration */
 .glass-card .p-2.rounded-3 {
   width: 44px;
   height: 44px;
@@ -161,7 +153,6 @@ a:hover {
   font-size: 1.3rem;
 }
 
-/* Pastel, high-contrast configurations for metric badges */
 .glass-card .bg-success.bg-opacity-10 {
   background-color: rgba(16, 185, 129, 0.1) !important;
   color: #047857 !important;
@@ -186,7 +177,6 @@ a:hover {
   border: 1px solid rgba(245, 158, 11, 0.2) !important;
 }
 
-/* Empty State Containers */
 .empty-state-box {
   background-color: #f8fafc;
   border: 1.5px dashed #cbd5e1;
@@ -230,7 +220,6 @@ a:hover {
   border-radius: 8px;
 }
 
-/* Badge variants for user roles */
 .badge.bg-primary {
   background-color: rgba(99, 102, 241, 0.1) !important;
   color: #4338ca !important;
@@ -255,7 +244,6 @@ a:hover {
   border: 1px solid #cbd5e1 !important;
 }
 
-/* Auth Pages Container */
 .auth-container {
   display: flex;
   align-items: center;
@@ -281,7 +269,6 @@ a:hover {
   margin-bottom: 0.5rem !important;
 }
 
-/* Gradient text elements */
 .text-gradient {
   background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%);
   background-clip: text;
@@ -289,7 +276,6 @@ a:hover {
   -webkit-text-fill-color: transparent;
 }
 
-/* Buttons */
 .btn-gradient {
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: #ffffff !important;
@@ -334,7 +320,6 @@ a:hover {
   opacity: 1 !important;
 }
 
-/* Custom Input Controls */
 .form-control-custom {
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
@@ -357,7 +342,6 @@ a:hover {
   outline: none;
 }
 
-/* Custom Select Element drop down arrow */
 select.form-control-custom {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   background-position: right 1rem center;
@@ -366,7 +350,6 @@ select.form-control-custom {
   appearance: none;
 }
 
-/* Sidebar Styling */
 .sidebar {
   width: 280px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
@@ -434,7 +417,6 @@ select.form-control-custom {
   font-weight: 600;
 }
 
-/* Danger / Sign Out Button styling */
 .btn-outline-danger {
   border-color: rgba(220, 38, 38, 0.35) !important;
   color: #dc2626 !important;
@@ -449,7 +431,6 @@ select.form-control-custom {
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
 }
 
-/* Header */
 .dash-header {
   display: flex;
   justify-content: space-between;
@@ -457,7 +438,6 @@ select.form-control-custom {
   margin-bottom: 3rem;
 }
 
-/* Alert styles */
 .custom-alert {
   position: fixed;
   top: 25px;
@@ -486,7 +466,6 @@ select.form-control-custom {
   }
 }
 
-/* Phase 2 upload management */
 .upload-dropzone {
   border: 1.5px dashed #cbd5e1;
   border-radius: 18px;
@@ -586,9 +565,10 @@ select.form-control-custom {
 
 .report-item-main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   min-width: 0;
+  flex: 1;
 }
 
 .report-item-icon {
@@ -604,6 +584,11 @@ select.form-control-custom {
   font-size: 1.2rem;
 }
 
+.report-item-body {
+  min-width: 0;
+  flex: 1;
+}
+
 .report-item h5 {
   margin: 0 0 0.25rem;
   font-size: 1rem;
@@ -614,6 +599,58 @@ select.form-control-custom {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.report-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.processing-summary {
+  margin-top: 0.85rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.processing-summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.processing-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.processing-pill.status-passed {
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.08);
+  color: #047857;
+}
+
+.processing-pill.status-failed {
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+}
+
+.processing-message {
+  margin: 0.65rem 0 0;
   color: var(--text-muted);
   font-size: 0.84rem;
 }
@@ -633,6 +670,13 @@ select.form-control-custom {
     align-items: stretch;
   }
 
+  .report-item-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .report-process-btn,
   .report-delete-btn {
     width: 100%;
   }

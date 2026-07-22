@@ -56,6 +56,16 @@ export async function deleteReport(reportId) {
     });
 }
 
+export async function getProcessingResult(reportId) {
+    return apiRequest(`/api/reports/${reportId}/process`);
+}
+
+export async function processReport(reportId) {
+    return apiRequest(`/api/reports/${reportId}/process`, {
+        method: 'POST'
+    });
+}
+
 export function uploadReport(file, onProgress = () => {}) {
     return new Promise((resolve, reject) => {
         const token = getAuthToken();
