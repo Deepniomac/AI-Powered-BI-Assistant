@@ -3,11 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database.connection import engine, Base
 from app.api.auth import router as auth_router
+from app.api.processing import router as processing_router
 from app.api.upload import router as upload_router
+from app.models.processing_log import ProcessingLog
 from app.models.report import Report
+from app.models.validation_report import ValidationReport
 
 # Create database tables at application initialization
-# (Ensures 'users' table is auto-created in PostgreSQL on run)
+# (Ensures registered models are auto-created when the backend boots)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -25,8 +28,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include modular authentication router
+# Include modular routers
 app.include_router(auth_router)
+app.include_router(processing_router)
 app.include_router(upload_router)
 
 @app.get("/")

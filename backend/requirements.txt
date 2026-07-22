@@ -7,6 +7,12 @@ pydantic-settings>=2.2.0
 python-dotenv>=1.0.1
 python-multipart>=0.0.9
 python-magic>=0.4.27
+pandas>=2.2.0
+openpyxl>=3.1.2
+xlrd==1.2.0
+chardet>=5.2.0
+pyarrow>=17.0.0
+pytest>=8.2.0
 email-validator>=2.1.1
 passlib[bcrypt]>=1.7.4
 bcrypt==4.0.1

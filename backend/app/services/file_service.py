@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import uuid
@@ -12,7 +13,7 @@ except ImportError:  # pragma: no cover - dependency is expected in runtime requ
     magic = None
 
 
-ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls", ".pdf", ".docx"}
+ALLOWED_EXTENSIONS = {".csv", ".xlsx", ".xls", ".pdf", ".docx", ".json"}
 MAX_FILE_SIZE = 100 * 1024 * 1024
 CHUNK_SIZE = 1024 * 1024
 
@@ -26,6 +27,12 @@ CSV_MIME_TYPES = {
     "application/vnd.ms-excel",
     "application/octet-stream",
     "text/plain",
+}
+JSON_MIME_TYPES = {
+    "application/json",
+    "text/json",
+    "text/plain",
+    "application/octet-stream",
 }
 PDF_MIME_TYPES = {"application/pdf"}
 XLSX_MIME_TYPES = {
@@ -102,6 +109,38 @@ def _looks_like_csv(sample: bytes, mime_type: Optional[str]) -> bool:
     return any(separator in decoded for separator in [",", ";", "\t"]) and "\n" in decoded
 
 
+def _looks_like_json(sample: bytes, mime_type: Optional[str]) -> bool:
+    if b"\x00" in sample:
+        return False
+
+    if mime_type and (mime_type.startswith(TEXT_MIME_PREFIXES) or mime_type in JSON_MIME_TYPES):
+        try:
+            decoded = sample.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            try:
+                decoded = sample.decode("latin-1")
+            except UnicodeDecodeError:
+                return False
+    else:
+        try:
+            decoded = sample.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            try:
+                decoded = sample.decode("latin-1")
+            except UnicodeDecodeError:
+                return False
+
+    stripped = decoded.strip()
+    if not stripped or stripped[0] not in "[{":
+        return False
+
+    try:
+        json.loads(stripped)
+        return True
+    except json.JSONDecodeError:
+        return False
+
+
 def validate_file_signature(extension: str, sample: bytes) -> None:
     """
     Validates the uploaded file's leading bytes and MIME hints against the supported types.
@@ -118,6 +157,8 @@ def validate_file_signature(extension: str, sample: bytes) -> None:
         is_valid = sample.startswith(XLS_SIGNATURE) and (mime_type in XLS_MIME_TYPES or mime_type is None)
     elif extension == ".csv":
         is_valid = _looks_like_csv(sample, mime_type)
+    elif extension == ".json":
+        is_valid = _looks_like_json(sample, mime_type)
 
     if not is_valid:
         raise HTTPException(
